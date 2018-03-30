@@ -1,7 +1,5 @@
 Scriptname zzEstrusDwemer_ExhaustionSpell extends activemagiceffect hidden
 
-;not used in ED but maybe later something will change if i need to extend default EC script
-
 actor property PlayerRef Auto
 
 float EffectStartTime = 0.0
