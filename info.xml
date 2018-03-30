@@ -1,0 +1,17 @@
+﻿<fomod>
+  <Name>Estrus Dwemer</Name>
+  <Version>v4.34-0</Version>
+  <Author>Ed86</Author>
+  <Website>https://www.patreon.com/Ed86</Website>
+  <Description>
+  Requirements:
+  Estrus Chaurus+ v4.34 and its prerequisites http://www.loverslab.com/files/file/1033-estrus-chaurus/
+  
+  Optional(Sexlab animations for dwemer automatons sexing):
+  SexLab Animation Loader https://www.loverslab.com/files/file/2488-sexlab-animation-loader/
+  SLAL_Billyy_Creature2 https://www.loverslab.com/files/file/3999-billyys-slal-animations/
+  or other animation pack that adds dwarwen animations
+  
+ 
+ </Description>
+</fomod>
