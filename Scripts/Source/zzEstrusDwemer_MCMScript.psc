@@ -152,7 +152,7 @@ EndEvent
 event OnPageReset(string a_page)
 	{Called when a new page is selected, including the initial empty page}
 	if (a_page == "" || !Self.IsRunning() )
-		;LoadCustomContent("jbezorg/EstrusSpider.dds", 226, 119)
+		;LoadCustomContent("jbezorg/EstrusDwemer.dds", 226, 119)
 		return
 	else
 		UnloadCustomContent()
@@ -219,11 +219,11 @@ event OnPageReset(string a_page)
 
 		SetCursorPosition(0)
 ; EVENTS ------------------------------------------------------------------------------------
-		AddHeaderOption("Spider spit effect")
-		TentacleSpitEnabledOID = AddToggleOption("Machine", TentacleSpitEnabled)
-		ParalyzeSpitEnabledOID = AddToggleOption("Paralyze", ParalyzeSpitEnabled)
-		TentacleSpitChanceOID = addslideroption("Machine attack chance:", TentacleSpitChance, "{0} %")
-		ParalyzeSpitChanceOID = addslideroption("Paralyze chance:", ParalyzeSpitChance, "{0} %")
+		AddHeaderOption("$ED_ATTACK_TITLE")
+		TentacleSpitEnabledOID = AddToggleOption("$ED_MACHINE", TentacleSpitEnabled)
+		ParalyzeSpitEnabledOID = AddToggleOption("$ED_PARALYZE", ParalyzeSpitEnabled)
+		TentacleSpitChanceOID = addslideroption("$ED_MACHINE_CHANCE", TentacleSpitChance, "{0} %")
+		ParalyzeSpitChanceOID = addslideroption("$ED_PARALYZE_CHANCE", ParalyzeSpitChance, "{0} %")
 ; PREGNANCY ---------------------------------------------------------------------------------------
 		AddHeaderOption("$ED_PREGNANCY_TITLE")
 		AddToggleOptionST("STATE_PREGNANCY", "$ED_PREGNANCY", bPregnancyEnabled, iOptionFlag)
@@ -285,13 +285,13 @@ endevent
 
 event OnOptionHighlight(int option)
 	if (option == TentacleSpitEnabledOID)
-		SetInfoText("Enables Machine attacks when hit by Dwemer lightning/steam attack.\nDefault: false")
+		SetInfoText("$ED_MACHINE_INFO")
 	elseif (option == TentacleSpitChanceOID)
-		SetInfoText("Chance that being hit by Dwemer lightning/steam attack will start a Machine attack.\nDefault: 20")
+		SetInfoText("$ED_MACHINE_CHANCE_INFO")
 	elseif (option == ParalyzeSpitEnabledOID)
-		SetInfoText("Enables Paralyze when hit by Dwemer lightning/steam attack.\nDefault: true")
+		SetInfoText("$ED_PARALYZE_INFO")
 	elseif (option == ParalyzeSpitChanceOID)
-		SetInfoText("Chance that being hit by Dwemer lightning/steam attack will Paralyze actor.\nDefault: 20")
+		SetInfoText("$ED_PARALYZE_CHANCE_INFO")
 	endif
 endevent
 

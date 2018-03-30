@@ -48,7 +48,7 @@ event OnEffectStart(actor AkTarget, actor akCaster)
 endevent
 
 event OnUpdate()
-	NotifyPlayer("You desperately need rest...")
+	NotifyPlayer("$ED_EXHAUSTION_SPELL_MSG1")
 	RegisterForSingleUpdateGameTime(0.1)						;6 min updates to stat rate = 1% mult gain if not sleeping
 endevent
 
@@ -67,7 +67,7 @@ Event OnUpdateGameTime()
 		speedmult = speedmult + sleepbonus
 		hasslept = false
 		if statMult >= 100.0
-			NotifyPlayer("You have slept off the effects of the Dwemer device...")
+			NotifyPlayer("$ED_EXHAUSTION_SPELL_MSG2")
 		endif
 	endif
 
@@ -83,7 +83,7 @@ Event OnUpdateGameTime()
 		elseif !recoveredspeedmult
 			akVictim.setAV("speedmult",100.0) 
 			recoveredspeedmult = true
-			NotifyPlayer("Your legs no longer feel weak...")
+			NotifyPlayer("$ED_EXHAUSTION_SPELL_MSG3")
 		endif
 		RegisterForSingleUpdateGameTime(0.1)
 	endif

@@ -94,7 +94,7 @@ bool function OnEDStartAnimation_xjAlt(Form Sender, actor akVictim, actor akAggr
 	actor akActor = akVictim
 	Bool bGenderOk = mcm.zzEstrusChaurusGender.GetValueInt() == 2 || akActor.GetLeveledActorBase().GetSex() == mcm.zzEstrusChaurusGender.GetValueInt()
 	Bool invalidateVictim = !bGenderOk || akActor.IsBleedingOut() || akActor.isDead()
-	debug.notification("OnEDStartAnimation_xjAlt "+invalidateVictim)
+	;debug.notification("OnEDStartAnimation_xjAlt "+invalidateVictim)
 
 	if invalidateVictim 
 		return false
@@ -141,7 +141,7 @@ bool function OnEDStartAnimation(Form Sender, form akTarget, int intAnim, bool b
 
 	if !invalidateVictim 
 		int SexlabValidation = mcm.SexLab.ValidateActor(akActor)
-		debug.notification("intAnim "+intAnim + " SexlabValidation "+SexlabValidation)
+		;debug.notification("intAnim "+intAnim + " SexlabValidation "+SexlabValidation)
 		if intAnim == -1 && SexlabValidation != -12 ; Exclude Child Races
 			Oviposition(akActor, false)
 		elseif intAnim == 1 && SexlabValidation == 1
@@ -265,13 +265,15 @@ event EDAnimStage(string hookName, string argString, float argNum, form sender)
 		if stage == 3 && UseEDFX
 			controller.ActorAlias(actorlist[0]).OrgasmEffect()
 			if isPlayer
-				debug.notification("You are losing control...")
+				debug.notification("$ED_MACHINE_MSG1")
 			endif
+		elseif stage == 4
+			controller.ActorAlias(actorlist[0]).OrgasmEffect()
 		elseif stage == 5
 			mcm.SexLab.ApplyCum(actorlist[0], 5)
 			controller.ActorAlias(actorlist[0]).OrgasmEffect()
 			if isPlayer && UseEDFX
-				debug.notification("You begin to orgasm uncontrollably...")
+				debug.notification("$ED_MACHINE_MSG2")
 			endif
 		elseif stage == 6
 			controller.ActorAlias(actorlist[0]).OrgasmEffect()
@@ -286,7 +288,7 @@ event EDAnimStage(string hookName, string argString, float argNum, form sender)
 			endIf
 			controller.ActorAlias(actorlist[0]).OrgasmEffect()
 			if isPlayer && UseEDFX
-				debug.notification("The machine absorbs your sexual energy...")
+				debug.notification("$ED_MACHINE_MSG3")
 			endif
 		elseif stage == 9
 			;actorlist[0].RemoveItem(zzEstrusDwemerBinders, 1, true)
@@ -298,11 +300,11 @@ event EDAnimStage(string hookName, string argString, float argNum, form sender)
 		elseif stage == 10
 			controller.ActorAlias(actorlist[0]).OrgasmEffect()
 			if isPlayer && UseEDFX
-				debug.notification("You have been forced to orgasm until exhausted...")
+				debug.notification("$ED_MACHINE_MSG4")
 			endif
 		elseif stage == 11
 			if isPlayer && UseEDFX
-				debug.notification("You are almost too weak to stand...")
+				debug.notification("$ED_MACHINE_MSG5")
 			endif
 		endif
 	endif

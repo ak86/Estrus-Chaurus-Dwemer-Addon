@@ -109,7 +109,7 @@ function DwemerImpregnate(actor akVictim, actor akAgressor)
 
 	Bool bGenderOk = mcm.zzEstrusChaurusGender.GetValueInt() == 2 || akvictim.GetLeveledActorBase().GetSex() == mcm.zzEstrusChaurusGender.GetValueInt()
 	Bool invalidateVictim = !bGenderOk || ( akVictim.IsBleedingOut() || akVictim.isDead() )
-	debug.notification("DwemerImpregnate "+invalidateVictim)
+	;debug.notification("DwemerImpregnate "+invalidateVictim)
 
 	if invalidateVictim
 		return
