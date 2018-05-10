@@ -18,6 +18,8 @@ Function SetNodeScale(Actor akActor, string nodeName, float value, bool isFemale
 			sKey = "slif_scrotum"
 		ElseIf nodeName == "NPC Belly"
 			sKey = "slif_belly"
+		ElseIf nodeName == "NPC L Butt"
+			sKey = "slif_butt"
 		EndIf
 		
 		If (sKey != "")

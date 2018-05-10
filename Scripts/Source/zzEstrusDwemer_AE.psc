@@ -4,6 +4,7 @@ zzEstrusDwemer_MCMScript	property mcm			auto
 zzEstrusDwemer_Events		property EDevents		auto 
 
 Spell	property zzDwemerParasite					auto 
+Spell	property zzEstrusDwemerAnimationCooldown	auto 
 
 
 function RegisterForSLDwemer()
@@ -32,7 +33,7 @@ event onOrgasmS(Form ActorRef, Int Thread)
 	if actorList.Length > 1 && akActor != actorList[0]
 		;See if Dwemer was involved
 		if mcm.Sexlab.PregnancyRisk(Thread, actorlist[0], false, true)
-			if IsDwemerRace(akActor.GetRace()) == true														;SD+ Faction changes mean we can't rely on a faction check
+			if IsDwemer(akActor) == true														;SD+ Faction changes mean we can't rely on a faction check
 				DwemerImpregnate(actorlist[0], akActor)
 			endif
 		endif
@@ -54,7 +55,7 @@ event onOrgasm(string eventName, string argString, float argNum, form sender)
 		while i < actorlist.Length
 			;See if Dwemer was involved
 			if mcm.Sexlab.PregnancyRisk(argString as Int, actorlist[0], false, true)
-				if IsDwemerRace(actorlist[i].GetRace()) == true												;SD+ Faction changes mean we can't rely on a faction check
+				if IsDwemer(actorlist[i]) == true												;SD+ Faction changes mean we can't rely on a faction check
 					DwemerImpregnate(actorlist[0], actorlist[i])
 				endif
 			endif
@@ -84,7 +85,14 @@ event OnSexLabEnd(string eventName, string argString, float argNum, form sender)
 ;	endif
 endEvent
 
-bool function IsDwemerRace(race akRace)
+bool function IsDwemer(Actor akActor)
+	if akActor.HasKeyword( Game.GetFormFromFile(0x1397A, "Skyrim.esm") as Keyword ) ;ActorTypeDwarven Keyword
+		if akActor.IsInFaction(Game.GetFormFromFile(0x43598 , "Skyrim.esm") as Faction)	;DwarvenAutomatonFaction
+			return true
+		endif
+	endif
+	
+	Race akRace = akActor.GetRace()
 	if akRace == (Game.GetFormFromFile(0x131F1 , "Skyrim.esm") as Race) 			;Dwarven Centurion
 		return true
 	elseif akRace == (Game.GetFormFromFile(0x131F2 , "Skyrim.esm") as Race) 		;Dwarven Sphere
@@ -102,6 +110,7 @@ bool function IsDwemerRace(race akRace)
 			return true
 		endif
 	endif
+	
 	return false
 endfunction
 
@@ -130,32 +139,36 @@ endfunction
 
 function DwemerAttack(Actor akVictim, Actor akAgressor)
 
-	if mcm.TentacleSpitEnabled
-		if utility.randomint(1,100) <= mcm.TentacleSpitChance
-			
-			if EDevents.OnEDStartAnimation(self, akVictim, 1, true, 0, true)
-				if !akAgressor.IsInFaction(mcm.zzEstrusDwemerBreederFaction) 
-					akAgressor.AddToFaction(mcm.zzEstrusDwemerBreederFaction)
-				endif
+	if !akVictim.HasSpell(zzEstrusDwemerAnimationCooldown)
+		if mcm.TentacleSpitEnabled
+			if utility.randomint(1,100) <= mcm.TentacleSpitChance
+				zzEstrusDwemerAnimationCooldown.cast(akVictim,akVictim)
+				
+				if EDevents.OnEDStartAnimation(self, akVictim, 1, true, 0, true)
+					if !akAgressor.IsInFaction(mcm.zzEstrusDwemerBreederFaction) 
+						akAgressor.AddToFaction(mcm.zzEstrusDwemerBreederFaction)
+					endif
+				endIf
 			endIf
-		endIf
-	elseif mcm.ParalyzeSpitEnabled
-		if utility.randomint(1,100) <= mcm.ParalyzeSpitChance
-			
-			Spell paralyzeSpell = (Game.GetFormFromFile(0x52DE4 , "EstrusDwemer.esp") as Spell)
-			if paralyzeSpell
-				paralyzeSpell.cast(akAgressor,akVictim)
-				Utility.wait(2.0)
-				akVictim.dispelSpell(paralyzeSpell)
-				Utility.wait(1.0)
-			endif
-			
-			if EDevents.OnEDStartAnimation_xjAlt(self, akVictim, akAgressor)
-				if !akAgressor.IsInFaction(mcm.zzEstrusDwemerBreederFaction) 
-					akAgressor.AddToFaction(mcm.zzEstrusDwemerBreederFaction)
+		elseif mcm.ParalyzeSpitEnabled
+			if utility.randomint(1,100) <= mcm.ParalyzeSpitChance
+				zzEstrusDwemerAnimationCooldown.cast(akVictim,akVictim)
+				
+				Spell paralyzeSpell = (Game.GetFormFromFile(0x52DE4 , "EstrusDwemer.esp") as Spell)
+				if paralyzeSpell
+					paralyzeSpell.cast(akAgressor,akVictim)
+					Utility.wait(2.0)
+					akVictim.dispelSpell(paralyzeSpell)
+					Utility.wait(1.0)
 				endif
+				
+				if EDevents.OnEDStartAnimation_xjAlt(self, akVictim, akAgressor)
+					if !akAgressor.IsInFaction(mcm.zzEstrusDwemerBreederFaction) 
+						akAgressor.AddToFaction(mcm.zzEstrusDwemerBreederFaction)
+					endif
+				endIf
 			endIf
-		endIf
+		endif
 	endif
 	
 endfunction

@@ -372,24 +372,61 @@ event EDAnimEnd(string hookName, string argString, float argNum, form sender)
 endevent
 
 Function Oviposition(actor akVictim, bool UseParasiteSpell = true)
-	if akVictim == PlayerRef
-		if akVictim.IsInFaction(mcm.zzEstrusDwemerBreederFaction)
-			return
-		endIf
-		if ( !akVictim.HasSpell(mcm.zzEstrusDwemerBreederAbility ) );
-			akVictim.AddSpell(mcm.zzEstrusDwemerBreederAbility , false)
-			mcm.SexLab.AdjustPlayerPurity(-5.0)
-		endIf
-	else
-		If MCM.kIncubationDue.Find(akVictim, 1) < 0
-			Int BreederIdx = MCM.kIncubationDue.Find(none, 1)
-			if BreederIdx > 0
-				(zzEstrusDwemer.GetNthAlias(BreederIdx) as ReferenceAlias).ForceRefTo(akVictim)
-				(zzEstrusDwemer.GetNthAlias(BreederIdx) as zzEstrusDwemer_AliasScript).OnBreederStart(akVictim, BreederIdx)
-			endif
-		else
-			return
+	;block pregnancies from other estruses
+	Bool invalidateVictim = False
+
+	;Estrus Chaurus+
+		if akVictim.HasSpell( Game.GetFormFromFile(0x19121, "EstrusChaurus.esp") as Spell )		;ChaurusBreeder spell
+			invalidateVictim = True
 		endif
+		if akVictim.HasKeyword( Game.GetFormFromFile(0x160A8, "EstrusChaurus.esp") as Keyword )	;zzEstrusParasite Keyword
+			invalidateVictim = True
+		endif
+	
+	;Estrus Spider+
+		if akVictim.HasSpell( Game.GetFormFromFile(0x4e255, "EstrusSpider.esp") as Spell )		;SpiderBreeder spell
+			invalidateVictim = True
+		endif
+		if akVictim.HasKeyword( Game.GetFormFromFile(0x4F2A3, "EstrusSpider.esp") as Keyword )	;zzEstrusSpiderParasiteKWD Keyword
+			invalidateVictim = True
+		endif
+	
+	;Estrus Dwemer+
+		if akVictim.HasSpell( Game.GetFormFromFile(0x4e255, "EstrusDwemer.esp") as Spell )		;DwemerBreeder spell
+			invalidateVictim = True
+		endif
+		if akVictim.HasKeyword( Game.GetFormFromFile(0x4F2A3, "EstrusDwemer.esp") as Keyword )	;zzEstrusDwemerParasiteKWD Keyword
+			invalidateVictim = True
+		endif
+	
+	;Hentai pregnancy LE/SE
+		Faction HentaiPregnantFaction = ( Game.GetFormFromFile(0x12085, "HentaiPregnancy.esm") as Faction )		;HentaiPregnantFaction
+		if HentaiPregnantFaction
+			if akVictim.GetFactionRank(HentaiPregnantFaction) == 2 || akVictim.GetFactionRank(HentaiPregnantFaction) == 3
+				invalidateVictim = True
+			endif
+		endif
+	
+	if !invalidateVictim
+		if akVictim == PlayerRef
+			if akVictim.IsInFaction(mcm.zzEstrusDwemerBreederFaction)
+				return
+			endIf
+			if ( !akVictim.HasSpell(mcm.zzEstrusDwemerBreederAbility ) );
+				akVictim.AddSpell(mcm.zzEstrusDwemerBreederAbility , false)
+				mcm.SexLab.AdjustPlayerPurity(-5.0)
+			endIf
+		else
+			If MCM.kIncubationDue.Find(akVictim, 1) < 0
+				Int BreederIdx = MCM.kIncubationDue.Find(none, 1)
+				if BreederIdx > 0
+					(zzEstrusDwemer.GetNthAlias(BreederIdx) as ReferenceAlias).ForceRefTo(akVictim)
+					(zzEstrusDwemer.GetNthAlias(BreederIdx) as zzEstrusDwemer_AliasScript).OnBreederStart(akVictim, BreederIdx)
+				endif
+			else
+				return
+			endif
+		endif	
 	endif	
 	if UseParasiteSpell
 		zzEstrusDwemerParasite.RemoteCast(akVictim, akVictim, akVictim)
