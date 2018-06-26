@@ -251,7 +251,7 @@ event OnPageReset(string a_page)
 					thisName = kHatchingEgg[iIndex].GetCurrentLocation().GetName()
 					AddTextOption(thisName, thisTime, iOptionFlag)
 				else
-					( kHatchingEgg[iIndex] as zzSpiderEggsScript ).hatch()
+					( kHatchingEgg[iIndex] as zzEstrusDwemer_EggsScript ).hatch()
 				endIf
 				iCount += 1
 			elseIf fHatchingDue[iIndex] != 0.0
